@@ -79,3 +79,6 @@ export const auth = betterAuth({
     },
   },
 });
+function sendEmail(arg0: { to: string; subject: string; text: string }) {
+  console.log(` to: ${arg0.to}, subject: ${arg0.subject} text: ${arg0.text}`);
+}

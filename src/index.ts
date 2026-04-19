@@ -4,7 +4,7 @@ import { logger } from "hono/logger";
 import { auth } from "./auth";
 import { error } from "better-auth/api";
 import { cors } from "hono/cors";
-import { postgres, sql } from "bun";
+import { sql } from "bun";
 import { db } from "./db";
 const app = new Hono<{
   Variables: {
@@ -15,7 +15,7 @@ const app = new Hono<{
 app.use(
   "/api/auth/*",
   cors({
-    origin: ["http://localhost:3001", "https://findkite.com"],
+    origin: [process.env.BETTER_AUTH_TRUSTED_ORIGINS!],
     allowHeaders: ["Content-Type", "Authorization"],
     allowMethods: ["POST", "GET", "OPTIONS"],
     exposeHeaders: ["Content-Length"],

@@ -5,6 +5,22 @@ import { emailOTP, openAPI, twoFactor } from "better-auth/plugins";
 
 import * as schema from "../src/db/schema"; // IMPORT YOUR SCHEMA TABLES
 import { db } from "./db";
+const isProduction = process.env.NODE_ENV === "production";
+const cookieConfig = {
+  sessionToken: {
+    name: "findkite_session",
+    attributes: {
+      httpOnly: true,
+      // Only require HTTPS in production
+      secure: isProduction,
+      // 'none' requires 'secure: true', so use 'lax' for local dev
+      sameSite: isProduction ? "none" : "lax",
+      // Don't set a domain for localhost, let the browser handle it
+      domain: isProduction ? "findkite.com" : undefined,
+      path: "/",
+    },
+  },
+};
 export const auth = betterAuth({
   trustedOrigins: ["http://localhost:3001", "https://findkite.com"],
 
@@ -79,18 +95,9 @@ export const auth = betterAuth({
     },
   },
   cookies: {
-    sessionToken: {
-      name: "findkite_session",
-      attributes: {
-        httpOnly: true,
-        secure: true, // REQUIRED (HTTPS only)
-        sameSite: "none", // REQUIRED for cross-site cookies
-        domain: "findkite.com", // VERY IMPORTANT
-        path: "/",
-      },
-    },
+    sessionToken: cookieConfig.sessionToken,
   },
-  baseURL: "https://api.findkite.com",
+  baseURL: isProduction ? "https://api.findkite.com" : "http://localhost:4000",
 });
 function sendEmail(arg0: { to: string; subject: string; text: string }) {
   console.log(` to: ${arg0.to}, subject: ${arg0.subject} text: ${arg0.text}`);

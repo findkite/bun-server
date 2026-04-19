@@ -5,7 +5,7 @@ import { emailOTP, openAPI, twoFactor } from "better-auth/plugins";
 
 import * as schema from "../src/db/schema"; // IMPORT YOUR SCHEMA TABLES
 import { db } from "./db";
-const isLocalhost = origin?.includes("localhost");
+
 export const auth = betterAuth({
   trustedOrigins: ["http://localhost:3000", "https://findkite.com"],
 
@@ -86,7 +86,7 @@ export const auth = betterAuth({
         httpOnly: true,
         secure: true, // REQUIRED (HTTPS only)
         sameSite: "none", // REQUIRED for cross-site cookies
-        domain: isLocalhost ? undefined : ".findkite.com", // VERY IMPORTANT
+        domain: ".findkite.com", // VERY IMPORTANT
         path: "/",
       },
     },

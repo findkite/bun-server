@@ -16,13 +16,15 @@ const cookieConfig = {
       // 'none' requires 'secure: true', so use 'lax' for local dev
       sameSite: isProduction ? "none" : "lax",
       // Don't set a domain for localhost, let the browser handle it
-      domain: isProduction ? "findkite.com" : undefined,
+      domain: isProduction
+        ? process.env.BETTER_AUTH_TRUSTED_ORIGINS
+        : undefined,
       path: "/",
     },
   },
 };
 export const auth = betterAuth({
-  trustedOrigins: ["http://localhost:3001", "https://findkite.com"],
+  trustedOrigins: [process.env.BETTER_AUTH_TRUSTED_ORIGINS!],
 
   database: drizzleAdapter(db, {
     provider: "pg", // or "pg" or "mysql"
@@ -97,7 +99,7 @@ export const auth = betterAuth({
   cookies: {
     sessionToken: cookieConfig.sessionToken,
   },
-  baseURL: isProduction ? "https://api.findkite.com" : "http://localhost:4000",
+  baseURL: process.env.BETTER_AUTH_URL!,
 });
 function sendEmail(arg0: { to: string; subject: string; text: string }) {
   console.log(` to: ${arg0.to}, subject: ${arg0.subject} text: ${arg0.text}`);

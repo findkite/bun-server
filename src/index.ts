@@ -4,6 +4,8 @@ import { logger } from "hono/logger";
 import { auth } from "./auth";
 import { error } from "better-auth/api";
 import { cors } from "hono/cors";
+import { postgres, sql } from "bun";
+import { db } from "./db";
 const app = new Hono<{
   Variables: {
     user: typeof auth.$Infer.Session.user | null;
@@ -42,7 +44,23 @@ app.use("*", async (c, next) => {
 app.on(["POST", "GET"], "/api/auth/*", (c) => {
   return auth.handler(c.req.raw);
 });
-app.get("/", (c) => {
+app.get("/health", async (c) => {
+  try {
+    // A simple query to check the database connection
+    await db.execute(await sql`SELECT 1`);
+    return c.json({ status: "ok", database: "connected" });
+  } catch (error) {
+    return c.json(
+      {
+        status: "error",
+        database: "disconnected",
+        message: "error connecting to database",
+      },
+      500,
+    );
+  }
+});
+app.get("/", async (c) => {
   return c.text("Hello Hono! Auth endpoints ready");
 });
 

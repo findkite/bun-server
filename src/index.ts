@@ -4,7 +4,6 @@ import { logger } from "hono/logger";
 import { auth } from "./auth";
 import { error } from "better-auth/api";
 import { cors } from "hono/cors";
-
 const app = new Hono<{
   Variables: {
     user: typeof auth.$Infer.Session.user | null;
@@ -14,7 +13,7 @@ const app = new Hono<{
 app.use(
   "/api/auth/*",
   cors({
-    origin: ["http://localhost:3000", "https://findkite.com"],
+    origin: ["http://localhost:3001", "https://findkite.com"],
     allowHeaders: ["Content-Type", "Authorization"],
     allowMethods: ["POST", "GET", "OPTIONS"],
     exposeHeaders: ["Content-Length"],
@@ -103,7 +102,6 @@ app.get(
     };
   }),
 );
-
 export default {
   port: process.env.PORT || 4000,
   fetch: app.fetch,

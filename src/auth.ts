@@ -6,7 +6,7 @@ import { emailOTP, openAPI, twoFactor } from "better-auth/plugins";
 import * as schema from "../src/db/schema"; // IMPORT YOUR SCHEMA TABLES
 import { db } from "./db";
 export const auth = betterAuth({
-  trustedOrigins: ["http://localhost:3000", "https://findkite.com"],
+  trustedOrigins: ["http://localhost:3001", "https://findkite.com"],
 
   database: drizzleAdapter(db, {
     provider: "pg", // or "pg" or "mysql"

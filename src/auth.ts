@@ -12,6 +12,7 @@ export const auth = betterAuth({
     provider: "pg", // or "pg" or "mysql"
     schema: schema,
   }),
+
   // ✅ MOVE IT HERE (top-level)
   emailVerification: {
     enabled: true,
@@ -77,6 +78,23 @@ export const auth = betterAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     },
   },
+  advanced: {
+    cookies: {
+      sessionToken: {
+        attributes: {
+          sameSite: "none",
+          secure: true,
+        },
+      },
+      state: {
+        attributes: {
+          sameSite: "none",
+          secure: true,
+        },
+      },
+    },
+  },
+  baseURL: "https://api.findkite.com",
 });
 function sendEmail(arg0: { to: string; subject: string; text: string }) {
   console.log(` to: ${arg0.to}, subject: ${arg0.subject} text: ${arg0.text}`);

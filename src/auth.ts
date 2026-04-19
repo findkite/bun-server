@@ -85,7 +85,7 @@ export const auth = betterAuth({
         httpOnly: true,
         secure: true, // REQUIRED (HTTPS only)
         sameSite: "none", // REQUIRED for cross-site cookies
-        domain: ".findkite.com", // VERY IMPORTANT
+        domain: "findkite.com", // VERY IMPORTANT
         path: "/",
       },
     },

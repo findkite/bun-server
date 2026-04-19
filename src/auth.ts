@@ -6,7 +6,7 @@ import { emailOTP, openAPI, twoFactor } from "better-auth/plugins";
 import * as schema from "../src/db/schema"; // IMPORT YOUR SCHEMA TABLES
 import { db } from "./db";
 export const auth = betterAuth({
-  trustedOrigins: ["http://localhost:3000"],
+  trustedOrigins: ["http://localhost:3000", "https://findkite.com"],
 
   database: drizzleAdapter(db, {
     provider: "pg", // or "pg" or "mysql"
@@ -78,19 +78,15 @@ export const auth = betterAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     },
   },
-  advanced: {
-    cookies: {
-      sessionToken: {
-        attributes: {
-          sameSite: "none",
-          secure: true,
-        },
-      },
-      state: {
-        attributes: {
-          sameSite: "none",
-          secure: true,
-        },
+  cookies: {
+    sessionToken: {
+      name: "findkite_session",
+      attributes: {
+        httpOnly: true,
+        secure: true, // REQUIRED (HTTPS only)
+        sameSite: "none", // REQUIRED for cross-site cookies
+        domain: ".findkite.com", // VERY IMPORTANT
+        path: "/",
       },
     },
   },
